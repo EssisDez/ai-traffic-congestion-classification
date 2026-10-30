@@ -40,6 +40,7 @@ The main objectives of this project are:
 | Hugging Face Hub | Dataset source |
 | Gradio | Web application interface |
 | VS Code | Local application development |
+| GitHub | Project documentation and source code hosting |
 
 ## 4. Dataset Description
 
@@ -79,16 +80,19 @@ The dataset was divided into training and validation sets using an 80:20 ratio.
 | Validation | 240 | 20% |
 | **Total** | **1,200** | **100%** |
 
+The balanced dataset helps provide an equal number of images for each congestion category.
+
 ## 5. Model Architecture
 
 This project uses MobileNetV2, a lightweight Convolutional Neural Network architecture designed for efficient image classification.
 
 Transfer learning was applied using pretrained MobileNetV2 as the feature extraction component. A custom classification layer was added to predict the three congestion categories.
 
-![MobileNetV2 Model Architecture](images/Model architecture and parameters.jpeg)
+### Model Architecture Diagram
 
+![MobileNetV2 Model Architecture and Parameters](images/ClassificationReport.jpeg)
 
-### Model Architecture
+### Model Layers
 
 The model contains the following layers:
 
@@ -111,13 +115,13 @@ The model contains the following layers:
 | Non-trainable parameters | 2,257,984 |
 | Model format | Keras (.keras) |
 
-The model uses an internal rescaling layer. Images supplied to the application are resized and converted to arrays before prediction.
+The model includes an internal rescaling layer and uses MobileNetV2 as its feature extractor. Images are resized to 224 × 224 pixels before prediction.
 
 ## 6. Model Training
 
 The model was trained using TensorFlow and Keras in Google Colab.
 
-The training logs show two consecutive training phases, each containing 10 epochs, for 20 recorded epochs in total.
+The training process consisted of two consecutive training phases, with 10 epochs in each phase, for a total of 20 training epochs.
 
 The following metrics were monitored:
 
@@ -125,6 +129,18 @@ The following metrics were monitored:
 - Training loss
 - Validation accuracy
 - Validation loss
+
+### First Training Phase
+
+The first phase focused on training the classification model and monitoring its initial learning performance.
+
+![First Training Phase](images/ModelTraining.jpeg)
+
+### Second Training Phase
+
+The second phase continued training to improve the model's classification performance.
+
+![Second Training Phase](images/Model_Training2.jpeg)
 
 ### Final Recorded Training Results
 
@@ -135,25 +151,27 @@ The following metrics were monitored:
 | Validation accuracy | 71.25% |
 | Validation loss | 0.6478 |
 
-### First Training Phase
-
-![First Training Phase](images/Model Training.jpeg)
-
-### Second Training Phase
-
-![Second Training Phase](images/Model Training2.jpeg)
+The training results show that the model learned to identify patterns in traffic images and achieved a validation accuracy of 71.25%.
 
 ## 7. Model Evaluation
 
 The model was evaluated using a validation dataset containing 240 images.
 
-![Training Performance Graph](images/Model Evaluation.jpeg)
+### Training and Validation Performance
+
+The graph below illustrates the changes in training accuracy and validation accuracy during the training process.
+
+![MobileNetV2 Training Performance](images/Model_Evaluation.jpeg)
 
 ### Overall Performance
 
 **Validation Accuracy: 71.25%**
 
+The model correctly classified 171 out of 240 validation images.
+
 ### Classification Report
+
+The classification report provides precision, recall, and F1-score for each congestion category.
 
 | Class | Precision | Recall | F1-score | Support |
 |---|---:|---:|---:|---:|
@@ -166,22 +184,19 @@ The model was evaluated using a validation dataset containing 240 images.
 
 ### Confusion Matrix
 
+The confusion matrix shows the actual and predicted congestion categories.
+
 | Actual / Predicted | Low | Moderate | High |
 |---|---:|---:|---:|
 | Low | 58 | 9 | 4 |
 | Moderate | 16 | 35 | 31 |
 | High | 5 | 4 | 78 |
 
-The model correctly classified 171 out of 240 validation images, resulting in an accuracy of 71.25%.
-
-### Training and Validation Accuracy
-
-
-![Traffic Congestion Confusion Matrix](images/Classification Report.jpeg)
+![Traffic Congestion Confusion Matrix](images/ClassificationReport.jpeg)
 
 ### Performance Discussion
 
-- **Low congestion:** The model achieved a recall of 0.82.
+- **Low congestion:** The model achieved a recall of 0.82, correctly identifying most low-congestion images.
 - **Moderate congestion:** The model achieved a recall of 0.43, indicating difficulty distinguishing moderate traffic from other categories.
 - **High congestion:** The model achieved a recall of 0.90, showing that it successfully identified most high-congestion images.
 
@@ -191,7 +206,7 @@ The results indicate that the model performs better at identifying Low and High 
 
 A web application was developed using Gradio.
 
-The application allows users to upload a traffic or road image and receive congestion classification predictions.
+The application allows users to upload a traffic or road image and receive congestion classification predictions from the trained MobileNetV2 model.
 
 ### Application Workflow
 
@@ -211,9 +226,21 @@ The application allows users to upload a traffic or road image and receive conge
 - Prediction confidence scores.
 - Simple and user-friendly interface.
 
+### Gradio Application Interface
+
+The following screenshot shows the web interface developed using Gradio. Users can upload a traffic or road image and submit it for classification.
+
+![Traffic Congestion Classification Web Application](images/gradio_application.jpeg)
+
+### Example Prediction Result
+
+The following screenshot demonstrates the application's prediction output after an image is uploaded and submitted.
+
+![Traffic Congestion Classification Prediction Result](images/gradio_applicationresult.jpeg)
+
 ## 9. Project Structure
 
-The project directory contains the following files:
+The project directory contains the following files and folders:
 
 ```text
 Traffic_Congestion/
@@ -228,7 +255,16 @@ Traffic_Congestion/
 │
 ├── Dockerfile
 │
-└── README.md
+├── README.md
+│
+└── images/
+    ├── Model architecture and parameters.jpeg
+    ├── Model Training.jpeg
+    ├── Model Training2.jpeg
+    ├── Model Evaluation.jpeg
+    ├── Classification Report.jpeg
+    ├── gradio_application.jpeg
+    └── gradio_applicationresult.jpeg
 ```
 
 ### File Descriptions
@@ -241,6 +277,7 @@ Traffic_Congestion/
 | `requirements.txt` | Contains the required Python packages |
 | `Dockerfile` | Defines the application container configuration |
 | `README.md` | Project documentation |
+| `images/` | Contains project screenshots and evaluation results |
 
 ## 10. Installation and Setup
 
@@ -248,9 +285,10 @@ Traffic_Congestion/
 
 Install the following before running the application:
 
-- Python 3.10 or a compatible Python version.
+- Python version compatible with the installed TensorFlow release.
 - pip package installer.
 - Visual Studio Code (optional).
+- Git (if cloning the repository).
 
 ### Step 1: Clone the Repository
 
@@ -268,11 +306,7 @@ cd Traffic_Congestion
 
 ### Step 3: Install Dependencies
 
-```bash
-python -m pip install -r requirements.txt
-```
-
-On Windows, if the `python` command is unavailable, use:
+On Windows, run:
 
 ```powershell
 py -m pip install -r requirements.txt
@@ -286,7 +320,7 @@ py app.py
 
 The application will start locally.
 
-Open the local URL displayed in the terminal, usually:
+Open the local URL displayed in the terminal. It will usually be:
 
 ```text
 http://127.0.0.1:7860
@@ -307,23 +341,29 @@ Pillow
 
 Install all dependencies using:
 
-```bash
-python -m pip install -r requirements.txt
+```powershell
+py -m pip install -r requirements.txt
 ```
 
 ## 12. Running the Application with Gradio
 
 The application uses Gradio to provide an interactive interface.
 
-When the application starts, users can upload an image and receive a prediction.
+When the application starts, users can:
 
-The prediction output contains the confidence scores for:
+1. Open the Gradio application.
+2. Upload a traffic or road image.
+3. Click the Submit button.
+4. View the predicted congestion categories.
+5. Examine the confidence scores for each category.
+
+The prediction output contains confidence scores for:
 
 - Low
 - Moderate
 - High
 
-The Gradio share link can also provide temporary public access while the application is running. It is not a permanent hosting solution.
+The Gradio share link can also provide temporary public access while the application is running. It is not a permanent hosting solution and may stop working when the application session ends.
 
 ## 13. Results
 
@@ -340,7 +380,7 @@ The main results are:
 - Model architecture: MobileNetV2.
 - Application framework: Gradio.
 
-The trained model was saved and integrated into the application for image-based traffic congestion prediction.
+The trained model was saved in Keras format and integrated into the Gradio application for image-based traffic congestion prediction.
 
 ## 14. Limitations
 
@@ -372,7 +412,7 @@ Using MobileNetV2 transfer learning, the system was trained to classify traffic 
 
 The model achieved a validation accuracy of 71.25% and was evaluated using precision, recall, F1-score, and a confusion matrix.
 
-A Gradio application was also developed to allow users to upload traffic images and receive predictions.
+A Gradio application was also developed to allow users to upload traffic images and receive predictions through a simple web-based interface.
 
 Overall, the project demonstrates how computer vision and transfer learning can support automated traffic analysis and provide a foundation for more advanced intelligent transportation systems.
 
@@ -389,6 +429,8 @@ Overall, the project demonstrates how computer vision and transfer learning can 
 
 **Project Title:** AI-Powered Traffic Congestion Classification Using CNN Transfer Learning (MobileNetV2)
 
-**Final Model Accuracy:** 71.25%
+**Final Validation Accuracy:** 71.25%
+
+**Model Architecture:** MobileNetV2
 
 **Application:** Gradio Web Interface
