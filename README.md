@@ -275,7 +275,7 @@ Traffic_Congestion/
 | `traffic_congestion_mobilenetv2.keras` | Saved trained MobileNetV2 model |
 | `class_names.json` | Contains the three output class names |
 | `requirements.txt` | Contains the required Python packages |
-| `Dockerfile` | Defines the application container configuration |
+| `report` | Contains project report |
 | `README.md` | Project documentation |
 | `images/` | Contains project screenshots and evaluation results |
 
