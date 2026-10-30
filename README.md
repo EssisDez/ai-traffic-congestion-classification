@@ -135,9 +135,19 @@ The following metrics were monitored:
 | Validation accuracy | 71.25% |
 | Validation loss | 0.6478 |
 
+### First Training Phase
+
+![First Training Phase](images/Model Training.jpeg)
+
+### Second Training Phase
+
+![Second Training Phase](images/Model Training2.jpeg)
+
 ## 7. Model Evaluation
 
 The model was evaluated using a validation dataset containing 240 images.
+
+![Training Performance Graph](images/Model Evaluation.jpeg)
 
 ### Overall Performance
 
@@ -163,6 +173,11 @@ The model was evaluated using a validation dataset containing 240 images.
 | High | 5 | 4 | 78 |
 
 The model correctly classified 171 out of 240 validation images, resulting in an accuracy of 71.25%.
+
+### Training and Validation Accuracy
+
+
+![Traffic Congestion Confusion Matrix](images/Classification Report.jpeg)
 
 ### Performance Discussion
 
