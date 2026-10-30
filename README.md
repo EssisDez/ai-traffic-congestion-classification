@@ -90,7 +90,7 @@ Transfer learning was applied using pretrained MobileNetV2 as the feature extrac
 
 ### Model Architecture Diagram
 
-![MobileNetV2 Model Architecture and Parameters](images/ClassificationReport.jpeg)
+![MobileNetV2 Model Architecture and Parameters](images/Model_architecture_and_parameters.jpeg)
 
 ### Model Layers
 
