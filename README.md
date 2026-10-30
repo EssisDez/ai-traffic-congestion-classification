@@ -434,3 +434,9 @@ Overall, the project demonstrates how computer vision and transfer learning can 
 **Model Architecture:** MobileNetV2
 
 **Application:** Gradio Web Interface
+
+## Project Report
+
+You can access the complete project report using the link below:
+
+[View Full Project Report (PDF)](report/25MDA10002_Desiree.pdf)
