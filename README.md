@@ -1,362 +1,379 @@
-# ai-traffic-congestion-classification
-Traffic congestion classification using CNN transfer learning with MobileNetV2 and Gradio.
-
-# AI-Powered Traffic Congestion Classification Using CNN Transfer Learning
+# AI-Powered Traffic Congestion Classification Using CNN Transfer Learning (MobileNetV2)
 
 ## 1. Project Overview
 
-Traffic congestion is a common problem in urban areas. Heavy traffic can increase travel time, fuel consumption, air pollution, and road safety risks. Identifying traffic congestion levels from road images can help support traffic monitoring and transportation management.
+Traffic congestion is a major challenge in urban areas. It causes delays, increases fuel consumption, contributes to air pollution, and affects transportation efficiency.
 
-This project develops an AI-powered traffic congestion classification system using **Convolutional Neural Networks (CNNs)** and transfer learning. The system uses the MobileNetV2 architecture to analyze traffic images and classify them into three categories:
+This project develops an AI-powered traffic congestion classification system using Convolutional Neural Networks (CNN) and Transfer Learning.
 
-- **Low Congestion:** Few vehicles are present, and traffic generally flows freely.
-- **Moderate Congestion:** A moderate number of vehicles are present, and traffic may be slowing down.
-- **High Congestion:** Many vehicles are closely packed, and traffic may be moving slowly or stopped.
+The system uses the **MobileNetV2** architecture to analyze road and traffic images and classify them into three congestion categories:
 
-The project also includes an interactive web interface built with Gradio, allowing users to upload a traffic image and receive a predicted congestion category with confidence scores.
+- **Low:** Roads with relatively few vehicles.
+- **Moderate:** Roads with a noticeable number of vehicles and some traffic buildup.
+- **High:** Roads with heavy traffic and significant congestion.
+
+A web-based application developed using Gradio allows users to upload traffic images and receive predictions from the trained model.
 
 ## 2. Project Objectives
 
 The main objectives of this project are:
 
-1. To apply deep learning techniques to traffic image classification.
-2. To implement CNN transfer learning using MobileNetV2.
-3. To fine-tune a pretrained neural network for traffic congestion classification.
-4. To classify road images into Low, Moderate, and High congestion categories.
-5. To evaluate model performance using validation accuracy, a classification report, and a confusion matrix.
-6. To develop an interactive interface that allows users to test the trained model.
-7. To demonstrate a practical application of neural networks in intelligent transportation systems.
+1. To understand the application of Artificial Intelligence in traffic monitoring.
+2. To collect and prepare a traffic image dataset.
+3. To preprocess images for deep learning.
+4. To implement transfer learning using MobileNetV2.
+5. To train a CNN model to classify traffic congestion.
+6. To evaluate the model using classification metrics.
+7. To develop an interactive application for traffic image classification.
 
-## 3. Technologies Used
+## 3. Technologies and Tools
 
 | Technology | Purpose |
 |---|---|
-| Python | Main programming language |
+| Python | Programming language |
+| Google Colab | Model development and training |
 | TensorFlow | Deep learning framework |
-| Keras | Neural network construction and training |
-| MobileNetV2 | Pretrained CNN architecture |
-| NumPy | Numerical computations |
-| Matplotlib | Visualization of training performance |
-| Scikit-learn | Model evaluation |
-| Gradio | Interactive web interface |
-| Google Colab | Cloud-based development and GPU training |
-| GitHub | Source code management and project sharing |
+| Keras | Model building and training |
+| MobileNetV2 | Transfer learning architecture |
+| NumPy | Numerical operations |
+| Pillow (PIL) | Image processing |
+| Hugging Face Hub | Dataset source |
+| Gradio | Web application interface |
+| VS Code | Local application development |
 
-## 4. Deep Learning Methodology
+## 4. Dataset Description
 
-### 4.1 Convolutional Neural Network (CNN)
+The traffic image dataset was obtained from the Hugging Face Hub.
 
-A Convolutional Neural Network is a deep learning architecture commonly used for image recognition and classification. CNNs learn visual patterns such as edges, shapes, textures, and more complex image features.
+The original dataset contained four labels:
 
-In this project, the CNN analyzes traffic images to identify visual patterns associated with different congestion levels.
+- High-traffic
+- Low-traffic
+- Medium-traffic
+- No-traffic
 
-### 4.2 Transfer Learning
+For this project, the original labels were organized into three target categories:
 
-Transfer learning uses knowledge learned by a model on a large dataset to help solve a new task.
+- Low
+- Moderate
+- High
 
-This project uses MobileNetV2, which is pretrained on ImageNet. Its learned visual features provide a starting point for classifying traffic images.
+A balanced dataset was prepared by selecting 400 images for each category.
 
-Transfer learning can reduce training time and the amount of data required compared with training an entire CNN from scratch.
+### Dataset Distribution
 
-### 4.3 MobileNetV2 Architecture
+| Category | Number of Images |
+|---|---:|
+| Low | 400 |
+| Moderate | 400 |
+| High | 400 |
+| **Total** | **1,200** |
 
-MobileNetV2 is a convolutional neural network designed to provide efficient image processing. It uses depthwise separable convolutions and inverted residual blocks to reduce computational requirements.
+### Dataset Splitting
 
-For this project, the original classification head is removed and replaced with a custom classification head that predicts three congestion categories.
+The dataset was divided into training and validation sets using an 80:20 ratio.
 
-### 4.4 Model Training
+| Dataset | Images | Percentage |
+|---|---:|---:|
+| Training | 960 | 80% |
+| Validation | 240 | 20% |
+| **Total** | **1,200** | **100%** |
 
-The training process consists of two main stages:
+## 5. Model Architecture
 
-**Stage 1: Feature extraction**
+This project uses MobileNetV2, a lightweight Convolutional Neural Network architecture designed for efficient image classification.
 
-- Load MobileNetV2 with pretrained ImageNet weights.
-- Freeze the pretrained convolutional base.
-- Add global average pooling, dropout, and a three-class softmax output layer.
-- Train the new classification head on the traffic image dataset.
+Transfer learning was applied using pretrained MobileNetV2 as the feature extraction component. A custom classification layer was added to predict the three congestion categories.
 
-**Stage 2: Fine-tuning**
+![MobileNetV2 Model Architecture](images/Model architecture and parameters.jpeg)
 
-- Unfreeze selected later layers of MobileNetV2.
-- Keep batch normalization layers frozen for stability.
-- Train the model using a small learning rate.
-- Monitor validation performance to reduce overfitting.
 
-### 4.5 Image Preprocessing
+### Model Architecture
 
-The images are resized to 224 × 224 pixels to match the model input dimensions.
+The model contains the following layers:
 
-The pixel values are rescaled to the range expected by MobileNetV2. Data augmentation, including horizontal flipping, small rotations, and zooming, is used during training to help the model generalize to varied images.
+1. Input Layer
+2. Data Augmentation
+3. Rescaling
+4. MobileNetV2 Feature Extractor
+5. Global Average Pooling 2D
+6. Dropout
+7. Dense Classification Layer
 
-### 4.6 Classification Output
+### Model Configuration
 
-The final layer uses the softmax activation function to generate a score for each class:
+| Parameter | Value |
+|---|---:|
+| Input image size | 224 × 224 × 3 |
+| Number of classes | 3 |
+| Total parameters | 2,261,827 |
+| Trainable parameters | 3,843 |
+| Non-trainable parameters | 2,257,984 |
+| Model format | Keras (.keras) |
 
-- Low congestion
-- Moderate congestion
-- High congestion
+The model uses an internal rescaling layer. Images supplied to the application are resized and converted to arrays before prediction.
 
-The interface displays these scores as confidence estimates. They should not be interpreted as guaranteed probabilities of real-world congestion.
+## 6. Model Training
 
-## 5. System Workflow
+The model was trained using TensorFlow and Keras in Google Colab.
 
-The system follows this workflow:
+The training logs show two consecutive training phases, each containing 10 epochs, for 20 recorded epochs in total.
 
-1. Collect and label traffic images.
-2. Organize images into three class folders.
-3. Load and preprocess the dataset.
-4. Build the MobileNetV2 transfer-learning model.
-5. Train the classification head.
-6. Fine-tune selected CNN layers.
-7. Evaluate model performance.
-8. Save the trained model.
-9. Launch the Gradio interface.
-10. Upload an image and display the predicted congestion class.
+The following metrics were monitored:
 
-## 6. Dataset Structure
+- Training accuracy
+- Training loss
+- Validation accuracy
+- Validation loss
 
-The notebook expects a dataset organized into three folders:
+### Final Recorded Training Results
+
+| Metric | Result |
+|---|---:|
+| Training accuracy | 74.58% |
+| Training loss | 0.5749 |
+| Validation accuracy | 71.25% |
+| Validation loss | 0.6478 |
+
+## 7. Model Evaluation
+
+The model was evaluated using a validation dataset containing 240 images.
+
+### Overall Performance
+
+**Validation Accuracy: 71.25%**
+
+### Classification Report
+
+| Class | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Low | 0.73 | 0.82 | 0.77 | 71 |
+| Moderate | 0.73 | 0.43 | 0.54 | 82 |
+| High | 0.69 | 0.90 | 0.78 | 87 |
+| **Accuracy** | | | **0.71** | **240** |
+| Macro Average | 0.72 | 0.71 | 0.70 | 240 |
+| Weighted Average | 0.72 | 0.71 | 0.70 | 240 |
+
+### Confusion Matrix
+
+| Actual / Predicted | Low | Moderate | High |
+|---|---:|---:|---:|
+| Low | 58 | 9 | 4 |
+| Moderate | 16 | 35 | 31 |
+| High | 5 | 4 | 78 |
+
+The model correctly classified 171 out of 240 validation images, resulting in an accuracy of 71.25%.
+
+### Performance Discussion
+
+- **Low congestion:** The model achieved a recall of 0.82.
+- **Moderate congestion:** The model achieved a recall of 0.43, indicating difficulty distinguishing moderate traffic from other categories.
+- **High congestion:** The model achieved a recall of 0.90, showing that it successfully identified most high-congestion images.
+
+The results indicate that the model performs better at identifying Low and High congestion than Moderate congestion.
+
+## 8. Application Development
+
+A web application was developed using Gradio.
+
+The application allows users to upload a traffic or road image and receive congestion classification predictions.
+
+### Application Workflow
+
+1. The user uploads a traffic image.
+2. The image is converted into RGB format.
+3. The image is resized to 224 × 224 pixels.
+4. The image is converted into a NumPy array.
+5. The trained MobileNetV2 model processes the image.
+6. The application displays the predicted congestion categories and confidence scores.
+
+### Application Features
+
+- Image upload functionality.
+- Automatic image resizing.
+- AI-powered traffic classification.
+- Three congestion categories.
+- Prediction confidence scores.
+- Simple and user-friendly interface.
+
+## 9. Project Structure
+
+The project directory contains the following files:
 
 ```text
-traffic_dataset/
-├── low/
-│   ├── image1.jpg
-│   ├── image2.jpg
-│   └── ...
-├── moderate/
-│   ├── image1.jpg
-│   ├── image2.jpg
-│   └── ...
-└── high/
-    ├── image1.jpg
-    ├── image2.jpg
-    └── ...
+Traffic_Congestion/
+│
+├── app.py
+│
+├── traffic_congestion_mobilenetv2.keras
+│
+├── class_names.json
+│
+├── requirements.txt
+│
+├── Dockerfile
+│
+└── README.md
 ```
 
-The folder names represent the target classes. Each image must be assigned to the appropriate category based on its traffic conditions.
+### File Descriptions
 
-The dataset is divided into training and validation subsets. The training subset is used to optimize the model, while the validation subset is used to monitor its performance on images not used for training.
+| File | Description |
+|---|---|
+| `app.py` | Runs the Gradio prediction application |
+| `traffic_congestion_mobilenetv2.keras` | Saved trained MobileNetV2 model |
+| `class_names.json` | Contains the three output class names |
+| `requirements.txt` | Contains the required Python packages |
+| `Dockerfile` | Defines the application container configuration |
+| `README.md` | Project documentation |
 
-**Dataset source:** Add the name and link of the actual dataset used.
+## 10. Installation and Setup
 
-**Dataset size:** Add the total number of images and the number of images in each class after preparing the dataset.
+### Prerequisites
 
-**Dataset license:** Check and follow the original dataset's terms of use.
+Install the following before running the application:
 
-## 7. Installation and Requirements
+- Python 3.10 or a compatible Python version.
+- pip package installer.
+- Visual Studio Code (optional).
 
-The project was developed using Google Colab.
-
-The required libraries can be installed using:
+### Step 1: Clone the Repository
 
 ```bash
-pip install tensorflow numpy matplotlib scikit-learn pandas pillow gradio
+git clone YOUR_GITHUB_REPOSITORY_URL
 ```
 
-Alternatively, install the packages in a Colab notebook cell:
+Replace `YOUR_GITHUB_REPOSITORY_URL` with the actual repository URL.
 
-```python
-!pip install -q gradio scikit-learn matplotlib
+### Step 2: Navigate to the Project Folder
+
+```bash
+cd Traffic_Congestion
 ```
 
-Google Colab already includes many common machine learning libraries.
+### Step 3: Install Dependencies
 
-## 8. How to Run the Project
+```bash
+python -m pip install -r requirements.txt
+```
 
-### Step 1: Open the notebook
+On Windows, if the `python` command is unavailable, use:
 
-Open the project notebook in Google Colab.
+```powershell
+py -m pip install -r requirements.txt
+```
 
-**Notebook:** Add the path to your notebook in this repository.
+### Step 4: Run the Application
 
-### Step 2: Prepare the dataset
+```powershell
+py app.py
+```
 
-Prepare a ZIP file containing the `low`, `moderate`, and `high` folders. Upload the ZIP file when requested by the notebook.
+The application will start locally.
 
-### Step 3: Execute the notebook
-
-Run the cells in order to:
-
-- Import libraries.
-- Load the dataset.
-- Preprocess images.
-- Build the MobileNetV2 model.
-- Train and fine-tune the model.
-- Evaluate its performance.
-- Save the trained model.
-
-### Step 4: Launch the interactive interface
-
-Run the Gradio interface cell after training has completed.
-
-Colab will provide a temporary web link if the interface launches successfully with sharing enabled.
-
-### Step 5: Test the model
-
-Upload an individual road image. The interface displays the predicted congestion category and scores for the three classes.
-
-The interface requires the trained model to be available in the current runtime.
-
-## 9. Interactive User Interface
-
-The Gradio interface provides a simple way to interact with the trained CNN without manually writing prediction code.
-
-The user can:
-
-1. Open the interface link.
-2. Upload a traffic image.
-3. Submit the image for classification.
-4. View the predicted congestion category.
-5. Compare the model's scores for Low, Moderate, and High congestion.
-
-The interface is intended as a prototype for demonstrating image classification using deep learning.
-
-**Interface link:** Add your working Gradio link if you have a permanent hosting solution. Colab-generated sharing links are generally temporary.
-
-## 10. Model Evaluation
-
-The model is evaluated using a held-out validation dataset.
-
-The notebook generates the following evaluation outputs:
-
-### Validation accuracy
-
-Validation accuracy measures the proportion of validation images classified correctly.
-
-**Actual validation accuracy:** Add the value produced by your notebook.
-
-### Validation loss
-
-Validation loss measures the model's classification error according to the chosen loss function.
-
-**Actual validation loss:** Add the value produced by your notebook.
-
-### Classification report
-
-The classification report provides precision, recall, and F1-score for each congestion class.
-
-- **Precision:** The proportion of predictions for a class that are correct.
-- **Recall:** The proportion of actual examples of a class that are correctly identified.
-- **F1-score:** The harmonic mean of precision and recall.
-
-Insert the actual classification report produced by your notebook.
-
-### Confusion matrix
-
-The confusion matrix compares actual classes with predicted classes. It helps identify which congestion categories are correctly classified and which are confused with one another.
-
-Insert the confusion matrix generated by your notebook.
-
-### Test image results
-
-Record the actual results from your Gradio tests.
-
-| Test | Actual class | Predicted class | Confidence |
-|---|---|---|---|
-| 1 | Add result | Add result | Add result |
-| 2 | Add result | Add result | Add result |
-| 3 | Add result | Add result | Add result |
-
-These results must come from actual model predictions. Do not insert estimated or invented performance values.
-
-## 11. Project Results
-
-The completed system demonstrates how transfer learning can be applied to classify traffic images into three congestion categories.
-
-The trained model's effectiveness must be assessed using the validation metrics and test predictions obtained during execution.
-
-The final results should discuss:
-
-- Validation accuracy and loss.
-- Precision, recall, and F1-score for each class.
-- Patterns observed in the confusion matrix.
-- Performance on individual test images.
-- Any differences in performance between congestion categories.
-
-The quality and balance of the dataset can significantly affect these results.
-
-## 12. Applications
-
-Potential applications of traffic congestion image classification include:
-
-- Traffic monitoring and analysis.
-- Transportation research.
-- Smart city prototypes.
-- Road congestion awareness systems.
-- Educational demonstrations of deep learning.
-- Preliminary analysis of traffic camera images.
-
-This project is a prototype and is not a complete real-time traffic management system.
-
-## 13. Limitations
-
-The system has several limitations:
-
-1. **Dataset dependence:** Performance depends on the quality, quantity, and accuracy of the labeled images.
-2. **Class ambiguity:** The distinction between Low, Moderate, and High congestion may be subjective unless clear labeling criteria are defined.
-3. **Environmental variation:** Lighting, weather, camera angle, road type, and image quality may affect predictions.
-4. **Generalization:** A model trained on one dataset may not perform equally well on different roads or locations.
-5. **Image-based analysis:** The model classifies a single image rather than measuring traffic speed or congestion over time.
-6. **No live traffic feed:** The current prototype does not automatically connect to live traffic cameras.
-7. **Confidence scores:** Softmax scores are not necessarily calibrated probabilities of correctness.
-
-## 14. Future Improvements
-
-Possible improvements include:
-
-- Expanding the dataset with more diverse traffic images.
-- Improving class balance.
-- Comparing MobileNetV2 with other CNN architectures.
-- Applying additional evaluation methods and cross-validation.
-- Testing the model on independent road images.
-- Integrating a live traffic camera feed.
-- Combining image classification with vehicle detection and tracking.
-- Deploying the model through a persistent web application.
-- Investigating model interpretability techniques such as Grad-CAM.
-
-## 15. Ethical and Responsible Use
-
-Traffic images should be collected and used in accordance with applicable privacy rules and dataset licenses.
-
-The model's outputs should be treated as predictions rather than authoritative traffic measurements. Further validation would be required before using this system for operational transportation decisions.
-
-## 16. Repository Structure
-
-The repository may be organized as follows:
+Open the local URL displayed in the terminal, usually:
 
 ```text
-ai-traffic-congestion-classification/
-├── Traffic_Congestion_CNN_Colab.ipynb
-├── README.md
-├── requirements.txt
-├── .gitignore
-└── results/
-    ├── training_accuracy.png
-    └── confusion_matrix.png
+http://127.0.0.1:7860
 ```
 
-The `results/` directory is optional. Add plots only after generating them from the actual model execution.
+If Gradio selects another port, use the actual URL displayed in the terminal.
 
-Do not commit private information, credentials, or large datasets without checking their licenses and repository storage requirements.
+## 11. Requirements
 
-## 17. Conclusion
+The project requires the following Python packages:
 
-This project applies a CNN-based transfer-learning approach to traffic congestion image classification. MobileNetV2 provides pretrained visual features, while a custom classification head predicts Low, Moderate, and High congestion.
+```text
+tensorflow
+gradio
+numpy
+Pillow
+```
 
-Fine-tuning allows selected pretrained layers to adapt to the target dataset. Model evaluation and an interactive Gradio interface make it possible to examine the classifier's performance and test it on individual images.
+Install all dependencies using:
 
-The project demonstrates a practical educational application of neural networks and transfer learning. Its real-world usefulness depends on rigorous evaluation, appropriate dataset labeling, and testing across diverse traffic conditions.
+```bash
+python -m pip install -r requirements.txt
+```
 
-## 18. Author and Project Information
+## 12. Running the Application with Gradio
 
-- **Project title:** AI-Powered Traffic Congestion Classification Using CNN Transfer Learning
-- **Student name:** Add your name
-- **Course:** Neural Networks and Deep Learning
-- **Institution:** Add your institution
-- **Academic year:** Add your academic year
-- **GitHub repository:** Add your repository URL
-- **Dataset source:** Add your dataset URL
+The application uses Gradio to provide an interactive interface.
+
+When the application starts, users can upload an image and receive a prediction.
+
+The prediction output contains the confidence scores for:
+
+- Low
+- Moderate
+- High
+
+The Gradio share link can also provide temporary public access while the application is running. It is not a permanent hosting solution.
+
+## 13. Results
+
+The project successfully developed a traffic congestion classification model using MobileNetV2 transfer learning.
+
+The main results are:
+
+- Dataset size: 1,200 images.
+- Number of classes: 3.
+- Training images: 960.
+- Validation images: 240.
+- Validation accuracy: 71.25%.
+- Correct validation predictions: 171 out of 240.
+- Model architecture: MobileNetV2.
+- Application framework: Gradio.
+
+The trained model was saved and integrated into the application for image-based traffic congestion prediction.
+
+## 14. Limitations
+
+The project has some limitations:
+
+1. The validation accuracy is 71.25%, so predictions are not always correct.
+2. Moderate congestion has a relatively low recall.
+3. The dataset contains a limited number of images.
+4. Image quality, lighting, weather, and camera angles may affect predictions.
+5. The current application classifies uploaded images rather than continuously monitoring live traffic.
+
+## 15. Future Improvements
+
+The project can be improved through:
+
+1. Increasing the size and diversity of the traffic image dataset.
+2. Improving Moderate congestion classification by collecting more representative images.
+3. Fine-tuning selected MobileNetV2 layers.
+4. Comparing MobileNetV2 with other architectures such as EfficientNet and ResNet.
+5. Integrating real-time traffic camera feeds.
+6. Developing a mobile application.
+7. Deploying the application on a permanent hosting platform.
+
+## 16. Conclusion
+
+This project demonstrates the application of Artificial Intelligence and deep learning in traffic congestion classification.
+
+Using MobileNetV2 transfer learning, the system was trained to classify traffic images into Low, Moderate, and High congestion categories.
+
+The model achieved a validation accuracy of 71.25% and was evaluated using precision, recall, F1-score, and a confusion matrix.
+
+A Gradio application was also developed to allow users to upload traffic images and receive predictions.
+
+Overall, the project demonstrates how computer vision and transfer learning can support automated traffic analysis and provide a foundation for more advanced intelligent transportation systems.
+
+## 17. References
+
+1. Sandler, M., Howard, A., Zhu, M., Zhmoginov, A., and Chen, L. C. (2018). *MobileNetV2: Inverted Residuals and Linear Bottlenecks*. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR).
+2. TensorFlow Documentation: https://www.tensorflow.org/
+3. Keras Documentation: https://keras.io/
+4. Gradio Documentation: https://www.gradio.app/docs
+5. Hugging Face Documentation: https://huggingface.co/docs
+6. Google Colab: https://colab.research.google.com/
 
 ---
 
-*This project was developed for educational purposes as part of a Neural Networks and Deep Learning mini-project.*
+**Project Title:** AI-Powered Traffic Congestion Classification Using CNN Transfer Learning (MobileNetV2)
+
+**Final Model Accuracy:** 71.25%
+
+**Application:** Gradio Web Interface
